@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.devsgeek</groupId>
 	<artifactId>demo.api.trello</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>demo.api.trello</name>
 	<description>This is a Trello demo API</description>
 	<url/>
@@ -39,6 +39,19 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.30</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.konghq</groupId>
+			<artifactId>unirest-java</artifactId>
+			<version>3.14.5</version>
 		</dependency>
 	</dependencies>
 
