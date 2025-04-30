@@ -1,0 +1,42 @@
+name: Show me the secrets
+
+on:
+  workflow_dispatch
+
+jobs:
+
+  production:
+    run-on: ubuntu-latest
+
+    steps:
+      - name: Getting my App name
+        run: echo "On Production environment, my app name is ${{ vars.APP_NAME }}"
+
+      - name: Getting Trello Board ID
+        run: echo "On Production environment, board ID is ${{ vars.TRELLO_BOARD_ID }}"
+
+      - name: Getting Main List ID
+        run: echo "On Production environment, main publish list ID is ${{ vars.TRELLO_LIST_ID }}"
+
+      - name: Getting Trello Secret Key & Token
+        run:
+          echo "${{ secrets.TRELLO_TOKEN ?? 'Ok!, token found on Production environment'}}" &
+          echo "${{ secrets.TRELLO_SECRET_KEY ?? 'Ok!, secret key found on Production environment'}}"
+
+  staging:
+    run-on: ubuntu-latest
+
+    steps:
+      - name: Getting my App name
+        run: echo "On Staging environment, my app name is ${{ vars.APP_NAME }}"
+
+      - name: Getting Trello Board ID
+        run: echo "On Staging environment, board ID is ${{ vars.TRELLO_BOARD_ID }}"
+
+      - name: Getting Main List ID
+        run: echo "On Staging environment, main publish list ID is ${{ vars.TRELLO_LIST_ID }}"
+
+      - name: Getting Trello Secret Key & Token
+        run:
+          echo "${{ secrets.TRELLO_TOKEN ?? 'Ok!, token found on Staging environment'}}" &
+          echo "${{ secrets.TRELLO_SECRET_KEY ?? 'Ok!, secret key found on Staging environment'}}"
