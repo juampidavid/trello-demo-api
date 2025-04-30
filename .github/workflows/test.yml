@@ -4,9 +4,9 @@ on:
   workflow_dispatch
 
 jobs:
-
   production:
     runs-on: ubuntu-latest
+    environment: PRODUCTION
 
     steps:
       - name: Getting my App name
@@ -25,6 +25,7 @@ jobs:
 
   staging:
     runs-on: ubuntu-latest
+    environment: STAGING
 
     steps:
       - name: Getting my App name
