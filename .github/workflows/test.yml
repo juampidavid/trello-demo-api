@@ -6,7 +6,7 @@ on:
 jobs:
 
   production:
-    run-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Getting my App name
@@ -24,7 +24,7 @@ jobs:
           echo "${{ secrets.TRELLO_SECRET_KEY }}"
 
   staging:
-    run-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Getting my App name
