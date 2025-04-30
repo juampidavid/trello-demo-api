@@ -1,4 +1,4 @@
-name: Show me the secrets
+name: Deploy Actions
 
 on:
   workflow_dispatch
@@ -20,8 +20,8 @@ jobs:
 
       - name: Getting Trello Secret Key & Token
         run:
-          echo "${{ secrets.TRELLO_TOKEN ?? 'Ok!, token found on Production environment'}}" &
-          echo "${{ secrets.TRELLO_SECRET_KEY ?? 'Ok!, secret key found on Production environment'}}"
+          echo "${{ secrets.TRELLO_TOKEN }}" &
+          echo "${{ secrets.TRELLO_SECRET_KEY }}"
 
   staging:
     run-on: ubuntu-latest
@@ -38,5 +38,5 @@ jobs:
 
       - name: Getting Trello Secret Key & Token
         run:
-          echo "${{ secrets.TRELLO_TOKEN ?? 'Ok!, token found on Staging environment'}}" &
-          echo "${{ secrets.TRELLO_SECRET_KEY ?? 'Ok!, secret key found on Staging environment'}}"
+          echo "${{ secrets.TRELLO_TOKEN ?? }}" &
+          echo "${{ secrets.TRELLO_SECRET_KEY }}"
