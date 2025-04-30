@@ -38,5 +38,5 @@ jobs:
 
       - name: Getting Trello Secret Key & Token
         run:
-          echo "${{ secrets.TRELLO_TOKEN ?? }}" &
+          echo "${{ secrets.TRELLO_TOKEN }}" &
           echo "${{ secrets.TRELLO_SECRET_KEY }}"
