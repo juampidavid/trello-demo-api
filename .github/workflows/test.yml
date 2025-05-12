@@ -12,3 +12,6 @@ jobs:
     steps:
       - name: Say Hello!
         run: echo "¡Hello! from GitHub Actions on branch ${{ github.ref }}"
+
+      - name: Task name
+        run: echo "This is a marged task"
