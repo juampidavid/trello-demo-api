@@ -11,4 +11,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Say Hello!
-        uses: echo "¡Hello! from GitHub Actions on branch ${{ github.ref }}"
+        run: echo "¡Hello! from GitHub Actions on branch ${{ github.ref }}"
