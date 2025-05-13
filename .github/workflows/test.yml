@@ -79,6 +79,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
+    env:
+      code-deploy-application-name: trello-app
+      code-deploy-group-name: api-staging
 
     steps:
       - name: Say hello
@@ -112,3 +115,11 @@ jobs:
         run: |
           aws s3 cp ./trello-api-deployment-${{ needs.build.outputs.version }}.zip \
           s3://trello-app-${{ needs.build.outputs.environment }}/api/trello-api-deployment-${{ needs.build.outputs.version }}.zip
+
+      - name: Run CodeDeploy deployment
+        run: |
+          aws deploy create-deployment \
+            --application-name ${{ env.code-deploy-application-name }} \
+            --deployment-group-name ${{ env.code-deploy-group-name }} \
+            --deployment-config-name CodeDeployDefault.OneAtATime \
+            --s3-location bucket=trello-app-production,bundleType=zip,key=api/trello-api-deployment-${{ needs.build.outputs.version }}.zip
