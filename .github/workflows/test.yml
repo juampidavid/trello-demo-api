@@ -51,3 +51,25 @@ jobs:
           version=$(xmllint --xpath "/*[local-name()='project']/*[local-name()='version']/text()" pom.xml)
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
+      - name: Build with Maven
+        run: mvn clean install
+        env:
+          TRELLO_API_KEY: ${{ secrets.TRELLO_API_KEY }}
+          TRELLO_TOKEN: ${{ secrets.TRELLO_TOKEN }}
+          TRELLO_BOARD_ID: ${{ secrets.TRELLO_BOARD_ID }}
+          TRELLO_LIST_ID: ${{ secrets.TRELLO_LIST_ID }}
+
+      - name: Create Deployment Package
+        run: |
+          mkdir -p deploy
+          cp target/*.jar deploy/api.jar
+          echo "${{ steps.get_version.outputs.version }}" > ./deploy/version.txt
+          zip -r trello-api-deployment-${{ steps.get_version.outputs.version }}.zip ./deploy
+
+      - name: Upload Deployment Package
+        uses: actions/upload-artifact@v4
+        with:
+          name: trello-api-deployment-${{ steps.get_version.outputs.version }}
+          path: trello-api-deployment-${{ steps.get_version.outputs.version }}.zip
+          retention-days: 1
+
