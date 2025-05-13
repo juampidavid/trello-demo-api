@@ -9,9 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: ${{ github.ref == 'refs/heads/main' && 'PRODUCTION' || 'STAGING' }}
     steps:
       - name: Say Hello!
-        run: echo "¡Hello! from GitHub Actions on branch ${{ github.ref }}"
-
-      - name: Task name
-        run: echo "This is a marged task"
+        run: echo "The secret is ${{ secrets.TRELLO_SECRET_KEY }}"
