@@ -73,7 +73,7 @@ jobs:
           path: trello-api-deployment-${{ steps.get_version.outputs.version }}.zip
           retention-days: 1
 
-  Deploy:
+  deploy:
     runs-on: ubuntu-latest
     needs: build
 
