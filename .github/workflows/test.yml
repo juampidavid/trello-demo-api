@@ -13,6 +13,7 @@ jobs:
 
     outputs:
       version: ${{ steps.get_version.outputs.version }}
+      environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
 
     steps:
       - name: Say Hello!
@@ -108,4 +109,4 @@ jobs:
       - name: Upload to S3
         run: |
           aws s3 cp ./trello-api-deployment-${{ needs.build.outputs.version }}.zip \
-          s3://trello-app-deployment-packages/api/trello-api-deployment-${{ needs.build.outputs.version }}.zip
+          s3://trello-app-${{ needs.build.outputs.environment }}/api/trello-api-deployment-${{ needs.build.outputs.version }}.zip
