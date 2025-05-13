@@ -12,4 +12,9 @@ jobs:
     environment: ${{ github.ref == 'refs/heads/main' && 'PRODUCTION' || 'STAGING' }}
     steps:
       - name: Say Hello!
-        run: echo "The secret is ${{ secrets.TRELLO_SECRET_KEY }}"
+        run: |
+          if [[ "${{ secrets.TRELLO_SECRET_KEY }}" == "123" ]]; then
+            echo "Es 123"
+          else
+            echo "No es 123"
+          fi
