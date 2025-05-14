@@ -17,7 +17,7 @@ jobs:
 
     outputs:
       version: ${{ steps.get_version.outputs.version }}
-      stage: $STAGE
+      stage: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
 
     steps:
       - name: Say Hello!
