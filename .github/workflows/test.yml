@@ -9,20 +9,17 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    # Define here the GitHub Action environment:
-    environment: ${{ github.ref == 'refs/heads/main' && 'PRODUCTION' || 'STAGING' }}
     env:
-      # Define this environment variable to be used for aws-code-deploy folder selection:
-      STAGE: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
+      # Define the environment
+      stage: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
+    # Select GitHub Action environment:
+    environment: ${{ env.stage }}
 
     outputs:
       version: ${{ steps.get_version.outputs.version }}
-      stage: ${{ env.STAGE }}
+      stage: ${{ env.stage }}
 
     steps:
-      - name: Say Hello!
-        run: echo "Hello, world!"
-
       - name: Checkout code
         uses: actions/checkout@v4
         with:
@@ -68,7 +65,7 @@ jobs:
         run: |
           mkdir -p deploy/aws-code-deploy
           cp target/*.jar deploy/api.jar          
-          cp -r aws-code-deploy/${{ env.STAGE }}/* deploy/aws-code-deploy/
+          cp -r aws-code-deploy/${{ env.stage }}/* deploy/aws-code-deploy/
           cp appspec.yml deploy/
           echo "${{ steps.get_version.outputs.version }}" > ./deploy/version.txt
           zip -r trello-api-deployment-${{ steps.get_version.outputs.version }}.zip ./deploy
@@ -84,13 +81,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     env:
-      code-deploy-application-name: trello-app
-      code-deploy-group-name: staging
+      application-name: trello-app
 
     steps:
-      - name: Say hello
-        run: echo "Hello, world!"
-
       - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
@@ -112,7 +105,7 @@ jobs:
       - name: Run CodeDeploy deployment
         run: |
           aws deploy create-deployment \
-            --application-name ${{ env.code-deploy-application-name }} \
-            --deployment-group-name ${{ env.code-deploy-group-name }} \
+            --application-name ${{ env.application-name }} \
+            --deployment-group-name ${{ needs.build.outputs.stage }} \
             --deployment-config-name CodeDeployDefault.OneAtATime \
-            --s3-location bucket=trello-app-production,bundleType=zip,key=api/trello-api-deployment-${{ needs.build.outputs.version }}.zip
+            --s3-location bucket=trello-app-${{ needs.build.outputs.stage }},bundleType=zip,key=api/trello-api-deployment-${{ needs.build.outputs.version }}.zip
