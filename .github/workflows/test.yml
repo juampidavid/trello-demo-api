@@ -81,7 +81,7 @@ jobs:
     needs: build
     env:
       code-deploy-application-name: trello-app
-      code-deploy-group-name: api-staging
+      code-deploy-group-name: staging
 
     steps:
       - name: Say hello
