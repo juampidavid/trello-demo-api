@@ -16,13 +16,21 @@ echo $SECRET_STRING | jq -r 'to_entries | .[] | "\(.key)=\(.value)"' >> /etc/sys
 # Load the environment variables
 source /etc/sysconfig/trello-app-environments
 
-# Verify environment variables are set
+
+# Extraer las claves del JSON
+SECRET_KEYS=$(echo "$SECRET_STRING" | jq -r 'keys[]')
+
+# Validar que todas las claves en REQUIRED_VARS existan en SECRET_KEYS
 for VAR in "${REQUIRED_VARS[@]}"; do
-    if [ -z "$(env | grep "^$VAR=")" ]; then
-        echo "Error: $VAR variable are not defined in AWS Secrets Manager." >> /tmp/codedeploy.log
+    if ! echo "$SECRET_KEYS" | grep -q "^$VAR$"; then
+        echo "ERROR: La clave '$VAR' no está en SECRET_STRING." >> /etc/sysconfig/trello-app-environments
         exit 1
     fi
 done
+
+echo "Todas las claves requeridas están presentes en SECRET_STRING." >> /etc/sysconfig/trello-app-environments
+
+
 
 echo "Environment variables successfully set." >> /tmp/codedeploy.log
 
