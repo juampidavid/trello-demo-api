@@ -1,3 +1,3 @@
 #!/bin/bash
 
-echo "After install script started"
+echo "After install script started" >> /tmp/codedeploy.log
