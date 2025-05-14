@@ -13,11 +13,11 @@ jobs:
     environment: ${{ github.ref == 'refs/heads/main' && 'PRODUCTION' || 'STAGING' }}
     env:
       # Define this environment variable to be used for aws-code-deploy folder selection:
-      deploy-environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
+      STAGE: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
 
     outputs:
       version: ${{ steps.get_version.outputs.version }}
-      deploy-environment: ${{ deploy-environment }}
+      stage: $STAGE
 
     steps:
       - name: Say Hello!
@@ -68,7 +68,7 @@ jobs:
         run: |
           mkdir -p deploy
           cp target/*.jar deploy/api.jar          
-          cp -r aws-code-deploy/${{ deploy-environment }}/* deploy/aws-code-deploy/
+          cp -r aws-code-deploy/${{ $STAGE }}/* deploy/aws-code-deploy/
           cp appspec.yml deploy/
           echo "${{ steps.get_version.outputs.version }}" > ./deploy/version.txt
           zip -r trello-api-deployment-${{ steps.get_version.outputs.version }}.zip ./deploy
@@ -97,17 +97,6 @@ jobs:
           name: trello-api-deployment-${{ needs.build.outputs.version }}
           path: ./
 
-      - name: Key Exists
-        id: key_exists
-        run: |
-          if [ -z "${{ secrets.AWS_DEPLOY_ACCESS_KEY_ID }}" ]; then
-            echo "Key does not exist"
-            echo "key_exists=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "Key exists"
-            echo "key_exists=true" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Set AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -118,7 +107,7 @@ jobs:
       - name: Upload to S3
         run: |
           aws s3 cp ./trello-api-deployment-${{ needs.build.outputs.version }}.zip \
-          s3://trello-app-${{ needs.build.outputs.deploy-environment }}/api/trello-api-deployment-${{ needs.build.outputs.version }}.zip
+          s3://trello-app-${{ needs.build.outputs.stage }}/api/trello-api-deployment-${{ needs.build.outputs.version }}.zip
 
       - name: Run CodeDeploy deployment
         run: |
