@@ -9,11 +9,15 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Define here the GitHub Action environment:
     environment: ${{ github.ref == 'refs/heads/main' && 'PRODUCTION' || 'STAGING' }}
+    env:
+      # Define this environment variable to be used for aws-code-deploy folder selection:
+      deploy-environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
 
     outputs:
       version: ${{ steps.get_version.outputs.version }}
-      environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
+      deploy-environment: ${{ deploy-environment }}
 
     steps:
       - name: Say Hello!
@@ -64,7 +68,7 @@ jobs:
         run: |
           mkdir -p deploy
           cp target/*.jar deploy/api.jar          
-          cp -r aws-code-deploy/${{ outputs.environment }}/* deploy/aws-code-deploy/
+          cp -r aws-code-deploy/${{ deploy-environment }}/* deploy/aws-code-deploy/
           cp appspec.yml deploy/
           echo "${{ steps.get_version.outputs.version }}" > ./deploy/version.txt
           zip -r trello-api-deployment-${{ steps.get_version.outputs.version }}.zip ./deploy
@@ -114,7 +118,7 @@ jobs:
       - name: Upload to S3
         run: |
           aws s3 cp ./trello-api-deployment-${{ needs.build.outputs.version }}.zip \
-          s3://trello-app-${{ needs.build.outputs.environment }}/api/trello-api-deployment-${{ needs.build.outputs.version }}.zip
+          s3://trello-app-${{ needs.build.outputs.deploy-environment }}/api/trello-api-deployment-${{ needs.build.outputs.version }}.zip
 
       - name: Run CodeDeploy deployment
         run: |
