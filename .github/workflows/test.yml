@@ -9,11 +9,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Select GitHub Action environment:
+    environment: ${{ env.stage }}
     env:
       # Define the environment
       stage: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
-    # Select GitHub Action environment:
-    environment: ${{ env.stage }}
 
     outputs:
       version: ${{ steps.get_version.outputs.version }}
