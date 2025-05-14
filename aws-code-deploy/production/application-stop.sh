@@ -1,3 +1,3 @@
 #!/bin/bash
 
-echo "[Production] Application stop script started" >> /tmp/codedeploy.log
+echo "[Production] Mothefuker! Application stop script started" >> /tmp/codedeploy.log
