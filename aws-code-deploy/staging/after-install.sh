@@ -18,7 +18,7 @@ source /etc/sysconfig/trello-app-environments
 
 # Verify environment variables are set
 for VAR in "${REQUIRED_VARS[@]}"; do
-    if [ -z "${!VAR}" ]; then
+    if [ -z "$(env | grep "^$VAR=")" ]; then
         echo "Error: $VAR variable are not defined in AWS Secrets Manager." >> /tmp/codedeploy.log
         exit 1
     fi
