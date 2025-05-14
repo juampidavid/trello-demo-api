@@ -64,7 +64,7 @@ jobs:
         run: |
           mkdir -p deploy
           cp target/*.jar deploy/api.jar          
-          cp -r aws-code-deploy/${{ build.outputs.environment }}/* deploy/aws-code-deploy/
+          cp -r aws-code-deploy/${{ outputs.environment }}/* deploy/aws-code-deploy/
           cp appspec.yml deploy/
           echo "${{ steps.get_version.outputs.version }}" > ./deploy/version.txt
           zip -r trello-api-deployment-${{ steps.get_version.outputs.version }}.zip ./deploy
