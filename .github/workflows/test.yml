@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     # Select GitHub Action environment:
-    environment: ${{ env.stage }}
+    environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
     env:
       # Define the environment
       stage: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
