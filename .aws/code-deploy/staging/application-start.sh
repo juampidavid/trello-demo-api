@@ -6,9 +6,22 @@ echo "[Staging] Application start script started" >> /tmp/codedeploy.log
 echo "[Staging] Loading environment variables..." >> /tmp/codedeploy.log
 source /etc/sysconfig/trello-app-environments
 
+
+sudo mkdir /var/log/trello-api
+
 # Start the trello-api service
 echo "[Staging] Starting reup-api.service..." >> /tmp/codedeploy.log
+systemctl daemon-reload
 systemctl start trello-api.service
+systemctl enable trello-api.service
+
+if service reup-api status | grep -q running; then
+    echo "API is running."
+else
+    echo "Failed to start API."
+fi
+
+echo "[Staging] Starting reup-api.service..." >> /tmp/codedeploy.log
 
 # Verify trello-api service status
 if systemctl is-active --quiet trello-api.service; then
