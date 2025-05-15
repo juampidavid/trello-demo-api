@@ -8,6 +8,9 @@ source /etc/sysconfig/trello-app-environments
 
 sudo mkdir /var/log/trello-api >> /tmp/codedeploy.log
 
+sudo touch /var/log/trello-api/stdout.log >> /tmp/codedeploy.log
+sudo touch /var/log/trello-api/stderr.log >> /tmp/codedeploy.log
+
 # Start the trello-api service
 echo "[Staging] Starting trello-api.service..." >> /tmp/codedeploy.log
 systemctl daemon-reload
