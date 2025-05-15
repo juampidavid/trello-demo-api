@@ -8,28 +8,25 @@ source /etc/sysconfig/trello-app-environments
 
 sudo mkdir /var/log/trello-api >> /tmp/codedeploy.log
 
-sudo rm -rf /var/log/trello-api/stdout.log >> /tmp/codedeploy.log
-sudo rm -rf /var/log/trello-api/stderr.log >> /tmp/codedeploy.log
-
 # Start the trello-api service
-echo "[Staging] Starting reup-api.service..." >> /tmp/codedeploy.log
+echo "[Staging] Starting trello-api.service..." >> /tmp/codedeploy.log
 systemctl daemon-reload
 systemctl start trello-api.service
 systemctl enable trello-api.service
 
-if service reup-api status | grep -q running; then
-    echo "API is running."
+if service trello-api status | grep -q running; then
+    echo "API is running." >> /tmp/codedeploy.log
 else
-    echo "Failed to start API."
+    echo "Failed to start API." >> /tmp/codedeploy.log
 fi
 
-echo "[Staging] Starting reup-api.service..." >> /tmp/codedeploy.log
+echo "[Staging] Starting trello-api.service..." >> /tmp/codedeploy.log
 
 # Verify trello-api service status
 if systemctl is-active --quiet trello-api.service; then
-    echo "trello-api.service started successfully." >> /tmp/codedeploy.log
+    echo "[Staging] trello-api.service started successfully." >> /tmp/codedeploy.log
 else
-    echo "Failed to start trello-api.service." >> /tmp/codedeploy.log
+    echo "[Staging] Failed to start trello-api.service." >> /tmp/codedeploy.log
     exit 1
 fi
 
