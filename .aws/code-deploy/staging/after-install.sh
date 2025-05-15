@@ -31,7 +31,7 @@ for VAR in "${REQUIRED_VARS[@]}"; do
     fi
 done
 
-echo "Environment variables successfully set." >> /tmp/codedeploy.log
+echo "Environment variables successfully set" >> /tmp/codedeploy.log
 
 #Updates permissions to file.
 sudo chmod 644 /home/ec2-user/trello-api/api.jar >> /tmp/codedeploy.log
