@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ec2-user/trello-app-api
+    destination: /home/ec2-user/trello-api
 hooks:
   ApplicationStop:
     - location: code-deploy/application-stop.sh
