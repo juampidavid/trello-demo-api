@@ -5,22 +5,22 @@ files:
     destination: /home/ec2-user/trello-app-api
 hooks:
   ApplicationStop:
-    - location: aws-code-deploy/application-stop.sh
+    - location: code-deploy/application-stop.sh
       timeout: 300
       runas: root
   BeforeInstall:
-    - location: aws-code-deploy/before-install.sh
+    - location: code-deploy/before-install.sh
       timeout: 300
       runas: root
   AfterInstall:
-    - location: aws-code-deploy/after-install.sh
+    - location: code-deploy/after-install.sh
       timeout: 300
       runas: root
   ApplicationStart:
-    - location: aws-code-deploy/application-start.sh
+    - location: code-deploy/application-start.sh
       timeout: 300
       runas: root
   ValidateService:
-    - location: aws-code-deploy/validate-service.sh
+    - location: code-deploy/validate-service.sh
       timeout: 300
       runas: root
