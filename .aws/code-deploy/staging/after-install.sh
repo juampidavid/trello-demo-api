@@ -46,7 +46,7 @@ else
     yum install -y java-22-amazon-corretto
 fi
 
-echo "[Staging] Checking if service already exists" >> /tmp/codedeploy.log
+
 
 sudo bash create-service.sh
 
