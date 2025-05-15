@@ -38,6 +38,6 @@ fi
 
 echo "[Staging] Checking if service already exists" >> /tmp/codedeploy.log
 
-bash create-service.sh
+sudo bash create-service.sh
 
 echo "After-install steps completed." >> /tmp/codedeploy.log
