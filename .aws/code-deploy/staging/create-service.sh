@@ -10,11 +10,11 @@ Description=Trello Api
 
 [Service]
 EnvironmentFile=/etc/sysconfig/trello-api
-ExecStart=/usr/bin/java -jar --enable-preview /home/ec2-user/trello-app-api/api.jar
+ExecStart=/usr/bin/java -jar --enable-preview /home/ec2-user/trello-api/api.jar
 SuccessExitStatus=143
 StandardOutput=append:/var/log/trello-api/stdout.log
 StandardError=append:/var/log/trello-api/stderr.log
-c
+
 [Install]
 WantedBy=multi-user.target
 EOL

@@ -4,7 +4,7 @@ echo "[Staging] Application start script started" >> /tmp/codedeploy.log
 
 # Load the environment variables
 echo "[Staging] Loading environment variables..." >> /tmp/codedeploy.log
-source /etc/sysconfig/reup-api
+source /etc/sysconfig/trello-app-environments
 
 # Start the trello-api service
 echo "[Staging] Starting reup-api.service..." >> /tmp/codedeploy.log

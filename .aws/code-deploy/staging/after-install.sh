@@ -1,12 +1,18 @@
 #!/bin/bash
 
-SECRET_LOCATION="trello-app/staging"
+AWS_SM_PATH="trello-app/staging"
 REQUIRED_VARS=("TRELLO_API_KEY" "TRELLO_TOKEN" "TRELLO_BOARD_ID" "TRELLO_LIST_ID")
 
 echo "[Staging] After install script started" >> /tmp/codedeploy.log
 
 # Fetch secrets from AWS Secrets Manager
-SECRET_STRING=$(aws secretsmanager get-secret-value --secret-id $SECRET_LOCATION --query SecretString --output text)
+SECRET_STRING=$(aws secretsmanager get-secret-value --secret-id $AWS_SM_PATH --query SecretString --output text)
+
+# If secrets file exists, delete it:
+if [ -f /etc/sysconfig/trello-app-environments ]; then
+    echo "[Staging] Clear environment file" >> /tmp/codedeploy.log
+    rm -f /etc/sysconfig/trello-app-environments >> /tmp/codedeploy.log
+fi
 
 # Export secrets as environment variables
 echo $SECRET_STRING | jq -r 'to_entries | .[] | "\(.key)=\(.value)"' >> /etc/sysconfig/trello-app-environments
@@ -26,6 +32,10 @@ for VAR in "${REQUIRED_VARS[@]}"; do
 done
 
 echo "Environment variables successfully set." >> /tmp/codedeploy.log
+
+#Updates permissions to file.
+sudo chmod 644 /home/ec2-user/trello-api/api.jar >> /tmp/codedeploy.log
+sudo chown ec2-user:ec2-user /home/ec2-user/trello-api/api.jar >> /tmp/codedeploy.log
 
 # Verify Java installation
 echo "Verifying Java installation..." >> /tmp/codedeploy.log
