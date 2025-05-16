@@ -15,6 +15,20 @@ jobs:
       # Define the environment
       stage: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          MYSQL_DATABASE: sys
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     outputs:
       version: ${{ steps.get_version.outputs.version }}
       stage: ${{ env.stage }}
@@ -39,6 +53,13 @@ jobs:
       - name: Install xmllint
         run: sudo apt-get install -y libxml2-utils
 
+      - name: Wait for MySQL to be ready
+        run: |
+          while ! mysqladmin ping -h"127.0.0.1" --silent; do
+            echo "Waiting for database connection..."
+            sleep 2
+          done
+
       - name: Run tests
         run: mvn test
         env:
@@ -46,6 +67,13 @@ jobs:
           TRELLO_TOKEN: ${{ secrets.TRELLO_TOKEN }}
           TRELLO_BOARD_ID: ${{ secrets.TRELLO_BOARD_ID }}
           TRELLO_LIST_ID: ${{ secrets.TRELLO_LIST_ID }}
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: /home/runner/work/trello-demo-api/trello-demo-api/target/surefire-reports
 
       - name: Get version from pom.xml
         id: get_version
