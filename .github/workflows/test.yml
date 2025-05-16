@@ -14,7 +14,6 @@ jobs:
     env:
       # Define the environment
       stage: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
-      version: ${{ steps.get_version.outputs.version }}
 
     services:
       mysql:
@@ -31,8 +30,8 @@ jobs:
           --health-retries=3
 
     outputs:
+      version: ${{ steps.get_version.outputs.version }}
       stage: ${{ env.stage }}
-      version: ${{ env.version }}
 
     steps:
       - name: Checkout code
