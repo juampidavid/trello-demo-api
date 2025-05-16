@@ -15,7 +15,6 @@ jobs:
       # Define the environment
       stage: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
       version: ${{ steps.get_version.outputs.version }}
-      build-name: trello-api-deployment-${{ env.version }}.zip
 
     services:
       mysql:
@@ -34,7 +33,6 @@ jobs:
     outputs:
       stage: ${{ env.stage }}
       version: ${{ env.version }}
-      build-name: ${{ env.build-name }}
 
     steps:
       - name: Checkout code
@@ -96,10 +94,10 @@ jobs:
         run: |
           mkdir -p deploy/code-deploy
           cp target/*.jar deploy/api.jar          
-          cp -r .aws/code-deploy/${{ env.stage }}/* deploy/code-deploy/
+          cp -r .aws/code-deploy/staging/* deploy/code-deploy/
           cp appspec.yml deploy/
           echo "${{ steps.get_version.outputs.version }}" > ./deploy/version.txt
-          zip -r ${{ env.build-name }}.zip ./deploy
+          zip -r trello-api-deployment-${{ steps.get_version.outputs.version }}.zip ./deploy
 
       - name: Upload Deployment Package
         uses: actions/upload-artifact@v3
