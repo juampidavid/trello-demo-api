@@ -70,7 +70,7 @@ jobs:
 
       - name: Upload test reports
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: surefire-reports
           path: /home/runner/work/trello-demo-api/trello-demo-api/target/surefire-reports
@@ -99,7 +99,7 @@ jobs:
           zip -r trello-api-deployment-${{ steps.get_version.outputs.version }}.zip ./deploy
 
       - name: Upload Deployment Package
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: trello-api-deployment-${{ steps.get_version.outputs.version }}
           path: trello-api-deployment-${{ steps.get_version.outputs.version }}.zip
@@ -113,7 +113,7 @@ jobs:
 
     steps:
       - name: Download Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: trello-api-deployment-${{ needs.build.outputs.version }}
           path: ./
