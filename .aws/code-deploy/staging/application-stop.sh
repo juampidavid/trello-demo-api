@@ -1,7 +1,7 @@
 #!/bin/bash
 source log.sh
 
-echo log("Este mensaje es un log de prueba")
+log("Este mensaje es un log de prueba")
 
 # Stop the  service
 if systemctl is-active --quiet trello-api.service; then
